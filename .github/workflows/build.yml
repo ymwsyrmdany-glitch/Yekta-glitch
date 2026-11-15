@@ -1,0 +1,20 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q *.zip
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 7.4.2
+      - run: cd IranWeapons && gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IranWeapons-jar
+          path: IranWeapons/build/libs/*.jar
